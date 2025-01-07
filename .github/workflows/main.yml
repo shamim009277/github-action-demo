@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      
+
 env:
   CI: false
 
@@ -24,9 +24,13 @@ jobs:
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
+
       - name: Build project
         run: npm run build
-  
+
+      - name: List contents of dist directory
+        run: ls -al ./dist
+
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
         with:
@@ -46,11 +50,17 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: List contents of dist directory before deploy
+        run: ls -al ./dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          target_branch: gh-pages
+          force_orphan: true
+
 
 
         
