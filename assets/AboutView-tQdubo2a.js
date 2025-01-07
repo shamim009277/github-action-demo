@@ -1,0 +1,1 @@
+import{_ as o,c as s,a,b as n,w as r,r as d,o as c,d as l}from"./index-BJ-9Mm0Z.js";const _={},i={class:"about"};function u(f,e){const t=d("P");return c(),s("div",i,[e[1]||(e[1]=a("h1",null,"This is an about page",-1)),n(t,null,{default:r(()=>e[0]||(e[0]=[l("New Data Added")])),_:1})])}const m=o(_,[["render",u]]);export{m as default};
