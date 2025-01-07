@@ -1,42 +1,64 @@
-name: Build & Deploy
+name: Build and Deploy Vue.js to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger this workflow on a push to the 'main' branch
+
+env:
+  CI: false
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build Vue.js Project
+    runs-on: ubuntu-latest  # Run the job on an Ubuntu runner
 
     steps:
-      - name: Checkout repo
+      # Checkout the repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node
+      # Setup Node.js (using version 16 or 18 depending on your project's requirements)
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 16
 
-      - name: Install dependencies
+      # Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Build project
+      # Build the Vue.js project (assuming you're using Vue CLI)
+      - name: Build Project
         run: npm run build
 
+      # Upload the production-ready build files as an artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: production-files
+          path: dist  # Change 'dist' to the output folder used by your Vue.js project
+
   deploy:
-    name: Deploy
-    needs: build
+    name: Deploy to GitHub Pages
+    needs: build  # This job depends on the 'build' job
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'  # Ensure it only runs for the main branch
 
     steps:
+      # Download the build artifact from the build job
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
+
+      # Deploy to GitHub Pages using the peaceiris actions-gh-pages action
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.TOKEN }}
-          publish_dir: ./dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
+          publish_dir: ./dist  # Directory where the built files are stored
           
 
 
