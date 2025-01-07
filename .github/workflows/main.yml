@@ -1,0 +1,46 @@
+name: Build & deploy
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+     name: Build
+     runs-on: ubuntu-latest
+
+     steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3e
+        
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      # Step 3: Install dependencies and build the project
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+ 
+  
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-lates
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
+
+        
+
+    
