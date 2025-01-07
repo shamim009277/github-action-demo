@@ -6,6 +6,10 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/github-action-demo/',  // এখানে 'repository-name' আপনার GitHub রিপোজিটরির নাম হবে
+  build: {
+    outDir: 'dist',  // ভিউ প্রোজেক্টের বিল্ড ফোল্ডার
+  },
   plugins: [
     vue(),
     vueDevTools(),
